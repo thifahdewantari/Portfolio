@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Montserrat, Playfair_Display } from 'next/font/google';
 import Link from 'next/link';
 
@@ -20,6 +20,42 @@ const playfair = Playfair_Display({
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // State & Ref untuk Animation on Scroll
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+  const [isAboutVisible, setIsAboutVisible] = useState(false);
+  const [isProjectsVisible, setIsProjectsVisible] = useState(false);
+
+  // Intersection Observer untuk mendeteksi elemen saat di-scroll bolak-balik
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15, // Animasi akan berjalan saat 15% bagian elemen terlihat di layar
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Jika masuk ke dalam layar, jalankan animasi masuk
+          if (entry.target.id === 'about') setIsAboutVisible(true);
+          if (entry.target.id === 'projects') setIsProjectsVisible(true);
+        } else {
+          // Jika keluar dari layar, kembalikan ke state awal (reverse/ngilang)
+          if (entry.target.id === 'about') setIsAboutVisible(false);
+          if (entry.target.id === 'projects') setIsProjectsVisible(false);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    if (aboutRef.current) observer.observe(aboutRef.current);
+    if (projectsRef.current) observer.observe(projectsRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   // Fungsi untuk scroll kembali ke atas
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -30,24 +66,26 @@ export default function Home() {
       <div className="bg-white min-h-screen overflow-x-hidden selection:bg-fuchsia-900 selection:text-white relative">
         
         {/* =========================================
+            TOMBOL HAMBURGER MENU (FIXED & SOLID BLACK)
+        ========================================= */}
+        <div className="fixed top-8 right-6 md:top-10 md:right-10 z-50">
+          <button 
+            onClick={() => setIsMenuOpen(true)}
+            className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black flex flex-col items-center justify-center gap-[5px] hover:bg-gray-800 transition-colors shadow-lg border border-gray-800"
+          >
+            <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
+            <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
+            <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
+          </button>
+        </div>
+
+        {/* =========================================
             BAGIAN GELAP (HERO & ABOUT)
         ========================================= */}
         <div className="bg-black text-white rounded-b-[3rem] md:rounded-b-[5rem] pb-24 md:pb-32 relative z-10 shadow-2xl">
           
           {/* Efek Glow Ungu/Pink di Kanan Atas */}
           <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] bg-fuchsia-900/20 rounded-full blur-[100px] md:blur-[120px] pointer-events-none"></div>
-
-          {/* Tombol Hamburger Menu (Kanan Atas) */}
-          <div className="absolute top-8 right-6 md:top-10 md:right-10 z-40">
-            <button 
-              onClick={() => setIsMenuOpen(true)}
-              className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center gap-[5px] hover:bg-white/10 transition-colors"
-            >
-              <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
-              <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
-              <span className="w-5 md:w-6 h-[1.5px] bg-white block"></span>
-            </button>
-          </div>
 
           {/* HERO SECTION */}
           <main className="relative flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 pb-16 md:pt-40 md:pb-20 min-h-[75vh]">
@@ -68,9 +106,11 @@ export default function Home() {
             </div>
           </main>
 
-          {/* ABOUT ME SECTION */}
-          <section id="about" className="relative px-6 md:px-12 lg:px-24 pt-8 md:pt-12 z-10 flex flex-col md:flex-row justify-between md:items-center gap-12 md:gap-20">
-            <div className="flex flex-col leading-[0.8] flex-shrink-0">
+          {/* ABOUT ME SECTION (Dengan Animasi Scroll Bolak-Balik) */}
+          <section id="about" ref={aboutRef} className="relative px-6 md:px-12 lg:px-24 pt-8 md:pt-12 z-10 flex flex-col md:flex-row justify-between md:items-center gap-12 md:gap-20">
+            
+            {/* Animasi Kiri ke Kanan */}
+            <div className={`flex flex-col leading-[0.8] flex-shrink-0 transition-all duration-1000 ease-out transform ${isAboutVisible ? 'translate-x-0 opacity-100' : '-translate-x-32 opacity-0'}`}>
               <h2 className={`${playfair.className} text-7xl md:text-[8rem] lg:text-[10rem] text-gray-300 tracking-tight font-normal`}>
                 ABOUT
               </h2>
@@ -79,7 +119,8 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="md:w-1/2 lg:w-5/12 flex flex-col justify-center mt-4 md:mt-0">
+            {/* Animasi Bawah ke Atas (Tertunda sedikit agar lebih dinamis) */}
+            <div className={`md:w-1/2 lg:w-5/12 flex flex-col justify-center mt-4 md:mt-0 transition-all duration-1000 delay-200 ease-out transform ${isAboutVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
               <p className={`${montserrat.className} text-gray-400 font-light text-lg md:text-xl leading-relaxed mb-10`}>
                 Passionate about software development and exploring data-driven solutions. I specialize in creating <span className="font-bold text-white">dynamic experiences</span> and comprehensive system architectures that leave a lasting impact.
               </p>
@@ -98,10 +139,10 @@ export default function Home() {
         {/* =========================================
             BAGIAN TERANG (FEATURED PROJECTS)
         ========================================= */}
-        <section id="projects" className="relative px-6 md:px-12 lg:px-24 py-20 md:py-28 bg-white text-black z-0">
+        <section id="projects" ref={projectsRef} className="relative px-6 md:px-12 lg:px-24 py-20 md:py-28 bg-white text-black z-0">
           
-          {/* Header "Featured Projects." */}
-          <div className="mb-12 md:mb-16 flex flex-col leading-[0.9]">
+          {/* Header "Featured Projects." (Animasi Kanan ke Kiri) */}
+          <div className={`mb-12 md:mb-16 flex flex-col leading-[0.9] transition-all duration-1000 ease-out transform ${isProjectsVisible ? 'translate-x-0 opacity-100' : 'translate-x-32 opacity-0'}`}>
             <h2 className={`${playfair.className} text-4xl md:text-5xl lg:text-6xl text-gray-400 tracking-tight`}>
               Featured
             </h2>
@@ -114,7 +155,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-stretch">
             
             {/* --- Project Card 1 --- */}
-            <div className="group flex flex-col h-full border border-gray-200 bg-white hover:shadow-2xl transition-all duration-500">
+            <div className={`group flex flex-col h-full border border-gray-200 bg-white hover:shadow-2xl transition-all duration-700 ease-out transform ${isProjectsVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
               
               {/* Gambar Mockup Top */}
               <div className="w-full aspect-[4/3] bg-[#f8f8f8] border-b border-gray-200 flex items-center justify-center overflow-hidden relative p-8">
@@ -170,8 +211,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* --- Project Card 2 --- */}
-            <div className="group flex flex-col h-full border border-gray-200 bg-white hover:shadow-2xl transition-all duration-500">
+            {/* --- Project Card 2 (Animasi sedikit tertunda) --- */}
+            <div className={`group flex flex-col h-full border border-gray-200 bg-white hover:shadow-2xl transition-all duration-700 delay-150 ease-out transform ${isProjectsVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
               
               <div className="w-full aspect-[4/3] bg-[#f8f8f8] border-b border-gray-200 flex items-center justify-center overflow-hidden relative p-8">
                 <img 
@@ -228,7 +269,7 @@ export default function Home() {
           </div>
 
           {/* --- TOMBOL VIEW ALL PROJECTS --- */}
-          <div className="mt-16 md:mt-20 flex justify-center w-full">
+          <div className={`mt-16 md:mt-20 flex justify-center w-full transition-all duration-1000 delay-300 ease-out transform ${isProjectsVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <Link 
               href="/projects" 
               className={`${montserrat.className} uppercase tracking-[0.15em] text-xs md:text-sm font-bold text-black bg-white border border-black rounded-full px-8 py-4 flex items-center gap-4 w-fit group hover:bg-black hover:text-white transition-all duration-300`}
