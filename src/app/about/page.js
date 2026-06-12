@@ -66,26 +66,37 @@ export default function About() {
               THIFAH
             </h2>
 
-            {/* Grup Tombol */}
-            <div className="flex flex-wrap items-center gap-4 mt-10 md:mt-12">
+            {/* Grup Tombol (Ukurannya diperkecil agar muat 3 tombol sejajar) */}
+            <div className="flex flex-wrap items-center gap-3 mt-10 md:mt-12">
               {/* Tombol Let's Connect */}
               <a 
                 href="https://www.linkedin.com/in/aathifahdewantari/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#161e28] text-[#f8f4eb] rounded-full px-6 py-3 md:px-8 md:py-4 flex items-center gap-3 w-fit hover:scale-105 transition-transform group shadow-lg"
+                className="bg-[#161e28] text-[#f8f4eb] rounded-full px-5 py-3 md:px-6 md:py-3.5 flex items-center gap-2 w-fit hover:scale-105 transition-transform group shadow-lg"
               >
-                <span className={`${montserrat.className} text-xs md:text-sm font-medium uppercase tracking-widest`}>Let's Connect</span>
-                <span className="text-lg md:text-xl font-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+                <span className={`${montserrat.className} text-[10px] md:text-xs font-medium uppercase tracking-widest`}>Let's Connect</span>
+                <span className="text-base md:text-lg font-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
               </a>
 
               {/* Tombol My Resume */}
               <a 
-                href="#link-drive-cv-nanti-disini" 
-                className="bg-[#f8f4eb] text-[#161e28] border border-[#161e28] rounded-full px-6 py-3 md:px-8 md:py-4 flex items-center gap-3 w-fit hover:bg-[#c9af80]/20 hover:scale-105 transition-all group shadow-sm"
+                href="https://drive.google.com/file/d/1bY7LOafIDtkpIJGIawHihRVzpLTRAOYg/view?usp=sharing" 
+                className="bg-[#f8f4eb] text-[#161e28] border border-[#161e28] rounded-full px-5 py-3 md:px-6 md:py-3.5 flex items-center gap-2 w-fit hover:bg-[#c9af80]/20 hover:scale-105 transition-all group shadow-sm"
               >
-                <span className={`${montserrat.className} text-xs md:text-sm font-bold uppercase tracking-widest`}>My Resume</span>
-                <span className="text-lg md:text-xl font-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+                <span className={`${montserrat.className} text-[10px] md:text-xs font-bold uppercase tracking-widest`}>My Resume</span>
+                <span className="text-base md:text-lg font-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+              </a>
+
+              {/* Tombol My GitHub */}
+              <a 
+                href="https://github.com/thifahdewantari" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#161e28] text-[#f8f4eb] rounded-full px-5 py-3 md:px-6 md:py-3.5 flex items-center gap-2 w-fit hover:scale-105 transition-transform group shadow-lg"
+              >
+                <span className={`${montserrat.className} text-[10px] md:text-xs font-medium uppercase tracking-widest`}>My GitHub</span>
+                <span className="text-base md:text-lg font-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
               </a>
             </div>
           </div>
