@@ -81,7 +81,7 @@ export default function About() {
 
               {/* Tombol My Resume */}
               <a 
-                href="https://drive.google.com/file/d/1bY7LOafIDtkpIJGIawHihRVzpLTRAOYg/view?usp=sharing" 
+                href="https://drive.google.com/file/d/1Rpqliy1CZ-A1xxn4aYGJXCSg0WC46DJg/view?usp=sharing" 
                 className="bg-[#f8f4eb] text-[#161e28] border border-[#161e28] rounded-full px-5 py-3 md:px-6 md:py-3.5 flex items-center gap-2 w-fit hover:bg-[#c9af80]/20 hover:scale-105 transition-all group shadow-sm"
               >
                 <span className={`${montserrat.className} text-[10px] md:text-xs font-bold uppercase tracking-widest`}>My Resume</span>
